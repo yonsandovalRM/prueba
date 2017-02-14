@@ -3,5 +3,50 @@
 		.row
 			.col-md-12
 				%h2 Salas de cine
-				%hr
 				
+				= link_to new_room_path, :class => "btn btn-success", "data-toggle" => "tooltip", "data-placement" => "top", :title => "Crear nueva sala de cine" do
+					Nueva Sala de Cine
+				%hr
+				%table#table.table
+					%thead
+						%tr
+							%th ID
+							%th Nombre
+							%th Cantidad de Asientos
+							%th Acciones
+					%tbody
+						- @rooms.each do |room|
+							%tr
+								%td= room.id
+								%td= room.name
+								%td 0
+								%td
+									=link_to(edit_room_path(room.id),  :class =>"btn btn-warning") do
+										Configurar
+
+
+:javascript
+	$(document).ready(function(){
+		$('#table').DataTable({
+			language: {
+				"decimal":        "",
+				"emptyTable":     "No hay datos disponibles",
+				"info":           "Mostrando _START_ hasta _END_ de _TOTAL_ registros",
+				"infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+				"infoFiltered":   "(filtrados desde _MAX_ registros totales)",
+				"infoPostFix":    "",
+				"thousands":      ",",
+				"lengthMenu":     "Mostrar _MENU_ registros",
+				"loadingRecords": "Cargando...",
+				"processing":     "Procesando...",
+				"search":         "Buscar:",
+				"zeroRecords":    "No se encontraron registros",
+				"paginate": {
+					"first":      "Primero",
+					"last":       "Último",
+					"next":       "Siguiente",
+					"previous":   "Anterior"
+				}
+			}
+		});
+	});

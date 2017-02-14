@@ -1,0 +1,131 @@
+%section
+	.container
+		.row
+			.col-md-12
+				%h2
+					Sala
+					=@room.name
+				%p
+					=@room.description
+				%hr
+				
+				.well
+					Para agregar asientos a esta sala primero defina la cantidad de filas y columnas que tendrá.
+			
+			.col-md-4
+				%form{:action => ""}
+					.form-group
+						%label{:for => "filas"} Cantidad de Filas
+						%input{:type => "text", :class=>"form-control", :id=>"filas"}
+					.form-group
+						%label{:for => "filas"} Cantidad de Columnas
+						%input{:type => "text", :class=>"form-control", :id=>"columnas"}
+				%a{:href => "javascript:;", :id=>"generaMatriz", :class=>"btn btn-info"}
+					Generar Sala
+				
+				
+			.col-md-8
+
+				.pantalla
+					Pantalla
+				%table.table
+
+				%a{:href => "javascript:;",:id=>"all", :class=>"btn btn-info"}
+					Marcar Todos
+				%a{:href => "javascript:;",:id=>"nothing", :class=>"btn btn-info"}
+					Desmarcar Todos
+				%a{:href => "javascript:;",:id=>"compilar", :class=>"btn btn-warning"}
+					Compilar
+
+			
+				
+				= form_for @seat do |f|
+					#resultados
+					
+
+
+					
+				
+:javascript 
+	$('#compilar').click(function() {
+
+		$('#resultados').html('');
+		var $asientos = 0;
+		
+		$("input:checkbox").each(function() {
+			
+			if ($(this).is(':checked')) {
+				$name = $(this).val();
+				$typed = 'Asiento';
+				$room_id = '#{@room.id}';
+				$asientos = $asientos + 1;
+			}
+			else
+			{
+				$name = $(this).val();
+				$typed = 'Pasillo';
+				$room_id = '#{@room.id}';
+			}
+			
+			$('#resultados').append('<input type="hidden" class="form-control" name="seat[name][]" value="'+$name+' "/>');
+			$('#resultados').append('<input type="hidden" class="form-control" name="seat[typed][]" value="'+$typed+' "/>');
+			$('#resultados').append('<input type="hidden" class="form-control" name="seat[room_id][]" value="'+$room_id+' "/>');
+
+		});
+		$('#resultados').append('<input type="submit" class="btn btn-success" value="Guardar '+$asientos+' asientos"/>');
+	});
+
+	$('#all').click(function() {
+		$("input[type=checkbox]").prop('checked', true);
+	});
+	$('#nothing').click(function() {
+		$("input[type=checkbox]").prop('checked', false);
+	});
+
+	$('#generaMatriz').click(function(){
+
+		var $cantFilas = $('#filas').val();
+		var $cantColumnas = $('#columnas').val();
+		$('.table').html('');
+		if($cantFilas < 25){
+			
+
+			var $cabecera = "<thead><tr>";
+			var $cuerpo = "<tbody>";
+			var $inicio = 64;
+			var $fin = (parseInt($cantFilas) + 64);
+			
+			for (var i = $inicio; i<= $fin; i++) {
+
+				
+					for (var p=0; p<= $cantColumnas; p++) {
+						if(i == 64){
+							$cabecera = $cabecera + '<td>';
+							$cabecera = $cabecera + p;
+							$cabecera = $cabecera + '</td>';
+						}
+						if(p == 0 && i != 64){
+							$cuerpo = $cuerpo + '<tr><td>'+String.fromCharCode(i)+'</td>';
+						}
+						if(p > 0 && i != 64){
+							$cuerpo = $cuerpo + '<td><input type="checkbox" value="'+String.fromCharCode(i)+p+'"/></td>';
+						}
+						
+					}
+					if(i == 64){
+						$cabecera = $cabecera + "</tr></thead>";
+						$('.table').append($cabecera);
+					}
+					$cuerpo = $cuerpo + "</tr>";
+					
+	
+			}
+			$cuerpo = $cuerpo + "</tbody>";
+			$('.table').append($cuerpo);
+		}else{
+			alert('La cantidad de filas no puede ser mayor que 25.');
+		}
+	});
+
+
+				

@@ -38,7 +38,7 @@ gem 'jbuilder', '~> 2.5'
 #custom gems
 gem 'bootstrap-sass', '~> 3.3.6'
 gem "haml-rails", "~> 0.9"
-
+gem 'jquery-datatables-rails', '~> 3.4.0'
 
 
 group :development, :test do
